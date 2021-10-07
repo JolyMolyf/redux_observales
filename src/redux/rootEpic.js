@@ -1,7 +1,7 @@
 import { combineEpics } from "redux-observable";
-import {attempGetEmployeesEpic, saveEmployees} from './epics/employesEpic'
+import {attempGetEmployeesEpic, saveEmployees, attempDeleteEmployeesEpic, attempUpdateEmployeeEpic} from './epics/employesEpic'
 
 
 export const rootEpic = combineEpics(
-  attempGetEmployeesEpic, saveEmployees
+  attempGetEmployeesEpic, saveEmployees, attempDeleteEmployeesEpic, attempUpdateEmployeeEpic
 );

@@ -1,43 +1,90 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AgGridReact } from "ag-grid-react";
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import { deleteEmployesAttemp, updateEmployeeAttemp } from "../../redux/actions/employesActions";
 
-const AgGrid = () => {
+
+const AgGrid = ({setSelectedEmployes}) => {
+  const dispatch = useDispatch();
   const employes = useSelector(state => {return state.emp.employes})
 
+  const [ emps, setEmps ] = useState(employes);
+  const [gridApi, setGridApi] = useState(null);
+  const [gridColumnApi, setGridColumnApi] = useState(null);
+  const handleUpdate = (oldData) => {
+    console.log(oldData, ' update')
+    dispatch(updateEmployeeAttemp(oldData))
+  }
+  const handleDelete = (data) => {
+    console.log(data, ' delete')
+    dispatch(deleteEmployesAttemp(data))
+  }
+
+  const onGridReady = (params) => {
+    setGridApi(params.api);
+    setGridColumnApi(params.columnApi);
+  };
+
+
+  useEffect(()=> {
+    setEmps(employes)
+  }, [employes])
+
   const columns = [
-    {headerName: "ID",field: "id", sortable: true, checkboxSelection: true},
+    {headerName: "ID",field: "id", sortable: true, checkboxSelection: true, filter:"agNumberColumnFilter"},
     {headerName: "Name",field: "employee_name", sortable: true},
-    {headerName: "Age",field: "employee_age", sortable: true},
-    {headerName: "Salary",field: "employee_salary", sortable: true},
+    {headerName: "Age",field: "employee_age", sortable: true, editable:false, filter:"agNumberColumnFilter",  cellStyle: (params)=>( 
+      params.value>18 && params.value<50?{borderLeft: "4px solid green"}:{borderLeft: "4px solid tomato"}
+    )},
+    {headerName: "Salary",field: "employee_salary", sortable: true, filter:"agNumberColumnFilter"},
+    {
+      headerName: "Actions", field: "id", filter: false, cellRendererFramework: (params) => <div>
+        <button  onClick={() => handleUpdate(params.data)}>Update</button>
+        <button  onClick={() => handleDelete(params.value)}>Delete</button>
+      </div>
+    }
   ]
 
   const defaultColDef = {
     sortable: true,
     filter: true,
     floatingFilter: true,
+   
   }
 
   const onSelectionChanged = (event) => {
-    console.log(event.api.getSelectedRows())
+    setSelectedEmployes(event.api.getSelectedRows())
   }
+  const getRowNodeId = data => {
+    return data.id;
+  };
 
 
 
   return (
     <div>
       <h2>Hello from grid Component</h2>
-      <div className="ag-theme-alpine" style={{height: 400, width: '53%'}}>
+      <button onClick={()=>{
+          const empsTemp = emps;
+          empsTemp[11].employee_age = 88; 
+          setEmps(empsTemp);
+          console.log(empsTemp[11])
+          gridApi.refreshCells() 
+      }}>Click</button>
+      <div className="ag-theme-alpine" style={{height: 600, minwidth: '53%'}}>
         <AgGridReact 
           columnDefs={columns}
           defaultColDef={defaultColDef}
-          rowData={[...employes]}
+          rowData={[...emps]}
           rowSelection={'multiple'}
           onSelectionChanged={onSelectionChanged}
           pagination={true}
           paginationPageSize={20}
+          onGridReady={onGridReady}
+          immutableData={true}
+          getRowNodeId={getRowNodeId}
           />
       </div> 
     </div>)

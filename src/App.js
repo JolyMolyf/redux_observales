@@ -6,12 +6,15 @@ import './App.css';
 import { useDispatch } from 'react-redux';
 import { attempGetEmployees } from './redux/actions/employesActions'
 import AgGrid from './components/agGgrid/agGrid';
+import List from './components/listComponent/list';
+import RxJsTest from './components/rxJsTest/RxJsTest';
 
 
 
 function App() {
 
   const dispatch = useDispatch();
+  const [ selectedEmployees, setSelectedEmployees ] = useState([])
   // const stream$ = interval(1000).pipe(
   //   take(5)
   // ).subscribe({
@@ -37,7 +40,9 @@ function App() {
     <div className="App">
 
       <h1>Employees</h1>
-      <AgGrid/>
+      <AgGrid setSelectedEmployes={setSelectedEmployees}/>
+      <List employes={[...selectedEmployees]}/>
+      <RxJsTest></RxJsTest>
     </div>
   );
 }
