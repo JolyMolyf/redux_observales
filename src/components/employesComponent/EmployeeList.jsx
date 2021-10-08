@@ -18,6 +18,9 @@ const EmployeeList = (props) => {
 
   return (<div>
     <h3>Emplpoyees Registered</h3>
+    <AgGrid setSelectedEmployes={setSelectedEmployees}/>
+    <List employes={[...selectedEmployees]}/>
+    <RxJsTest/>
   </div>)
 }
 
