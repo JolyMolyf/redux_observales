@@ -23,20 +23,20 @@ test('check if redux is rendered', () => {
 });
 
 
-/// This test should select one of the rows of the grid and check if it is added in to the list of the slected Employes
-// test('check if the selected rows are added to the list component', async () => {
-//   const {container, getByText, findByRole} = render(<EmployeeList/>)
-//   const cell = await (await screen.findByText(EMPLOYEE_NAME, undefined, { timeout: 5000}));
-//   expect(cell).toBeInTheDocument();
-//   expect(cell).toHaveClass('ag-cell')
-//   fireEvent.click(cell)
-//   expect(cell.parentElement).toHaveClass('ag-row-selected')
-//   const listEl = await screen.findByTestId('customelement')
-//   expect(listEl).toBeInTheDocument()
-//   expect(listEl).toHaveTextContent(EMPLOYEE_NAME)
+// This test should select one of the rows of the grid and check if it is added in to the list of the slected Employes
+test('check if the selected rows are added to the list component', async () => {
+  const {container, getByText, findByRole} = render(<EmployeeList/>)
+  const cell = await (await screen.findByText(EMPLOYEE_NAME, undefined, { timeout: 5000}));
+  expect(cell).toBeInTheDocument();
+  expect(cell).toHaveClass('ag-cell')
+  fireEvent.click(cell)
+  expect(cell.parentElement).toHaveClass('ag-row-selected')
+  const listEl = await screen.findByTestId('customelement')
+  expect(listEl).toBeInTheDocument()
+  expect(listEl).toHaveTextContent(EMPLOYEE_NAME)
 
 
-// }, 10000);
+}, 10000);
 
 test('check if cell gets the border of right color', async () => {
   const { container, getByText, findByRole } = render(<EmployeeList/>)
