@@ -33,7 +33,7 @@ const AgGrid = ({setSelectedEmployes}) => {
   }, [employes])
 
   const columns = [
-    {headerName: "ID",field: "id", sortable: true, checkboxSelection: true, filter:"agNumberColumnFilter"},
+    {headerName: "ID",field: "id", sortable: true, checkboxSelection: true, filter:"agNumberColumnFilter", },
     {headerName: "Name",field: "employee_name", sortable: true},
     {headerName: "Age",field: "employee_age", sortable: true, editable:false, filter:"agNumberColumnFilter",  cellStyle: (params)=>( 
       params.value>18 && params.value<50?{borderLeft: "4px solid green"}:{borderLeft: "4px solid tomato"}
@@ -61,20 +61,24 @@ const AgGrid = ({setSelectedEmployes}) => {
     return data.id;
   };
 
+  const setAge = () => {
+    const empsTemp = emps;
+    setEmps(empsTemp.map((el )=>{  
+      console.log(el.employee_age, ' after')
+      return {...el, employee_age: el.employee_age + 2}
+      
+    }));
+    gridApi.refreshCells() 
+  }
 
 
   return (
     <div>
       <h2>Hello from grid Component</h2>
-      <button onClick={()=>{
-          const empsTemp = emps;
-          empsTemp[11].employee_age = 88; 
-          setEmps(empsTemp);
-          console.log(empsTemp[11])
-          gridApi.refreshCells() 
-      }}>Click</button>
-      <div className="ag-theme-alpine" style={{height: 600, minwidth: '53%'}}>
+      <button onClick={setAge}>Click</button>
+      <div className="ag-theme-alpine" data-testid={`grid`} style={{height: 600, minwidth: '53%'}}>
         <AgGridReact 
+          suppressColumnVirtualisation={true}
           columnDefs={columns}
           defaultColDef={defaultColDef}
           rowData={[...emps]}
