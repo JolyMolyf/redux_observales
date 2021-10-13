@@ -4,7 +4,7 @@ import { AgGridReact } from "ag-grid-react";
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import { deleteEmployesAttemp, updateEmployeeAttemp } from "../../redux/actions/employesActions";
-
+import './agGrid.css'
 
 const AgGrid = ({setSelectedEmployes}) => {
   const dispatch = useDispatch();
@@ -33,11 +33,19 @@ const AgGrid = ({setSelectedEmployes}) => {
   }, [employes])
 
   const columns = [
-    {headerName: "ID",field: "id", sortable: true, checkboxSelection: true, filter:"agNumberColumnFilter", },
+    {headerName: "ID",field: "id", sortable: true, checkboxSelection: true, filter:"agNumberColumnFilter",},
     {headerName: "Name",field: "employee_name", sortable: true},
-    {headerName: "Age",field: "employee_age", sortable: true, editable:false, filter:"agNumberColumnFilter",  cellStyle: (params)=>( 
-      params.value>18 && params.value<50?{borderLeft: "4px solid green"}:{borderLeft: "4px solid tomato"}
-    )},
+    {headerName: "Age",field: "employee_age", sortable: true, editable:false, filter:"agNumberColumnFilter",  
+    cellClassRules: {
+      'old': params => {
+        return params.value > 60
+      },
+      'young': params => {
+        return params.value > 18 && params.value < 60
+      }
+
+      }
+      },
     {headerName: "Salary",field: "employee_salary", sortable: true, filter:"agNumberColumnFilter"},
     {
       headerName: "Actions", field: "id", filter: false, cellRendererFramework: (params) => <div>
@@ -74,10 +82,10 @@ const AgGrid = ({setSelectedEmployes}) => {
 
   return (
     <div>
-      <h2>Hello from grid Component</h2>
+      <h2 className={'old'}>Hello from grid Component</h2>
       <button onClick={setAge}>Click</button>
       <div className="ag-theme-alpine" data-testid={`grid`} style={{height: 600, minwidth: '53%'}}>
-        <AgGridReact 
+        <AgGridReact
           suppressColumnVirtualisation={true}
           columnDefs={columns}
           defaultColDef={defaultColDef}

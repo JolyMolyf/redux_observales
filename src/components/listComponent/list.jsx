@@ -8,11 +8,11 @@ const List = ({employes}) => {
   return(
     <div>
       <h1>Selected Employes</h1>
-      <p> 61 </p>
+
       <ul>
       {employes.map((emp) => {
           return(
-            <li data-testid={`customelement`} key={emp.id}> {emp.employee_name}</li>
+            <li data-testid={`list`} key={emp.id}> {emp.employee_name}</li>
           )
       })}
       </ul>

@@ -1,0 +1,9 @@
+.old{
+  border-left: 4px solid tomato !important;
+  color: red;
+}
+
+.young{
+  border-left: 4px solid green !important;
+  color: green;
+}
