@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getCommentsAttemp } from '../../redux/actions/commentsActions';
 import { getPostsAttemp } from '../../redux/actions/postsActions';
 import { getUsersAttemp } from '../../redux/actions/usersActions';
-
+import WebWorkerTriggers from '../webWorkerComponent/workerTrigers';
 
 const UserList = (props) => {
   const dispatch = useDispatch(); 
@@ -17,8 +17,7 @@ const UserList = (props) => {
       dispatch(getUsersAttemp());
       dispatch(getPostsAttemp());
       dispatch(getCommentsAttemp());
-      console.log(posts)
-      console.log(comments)
+
   }, [])
 
 
@@ -32,6 +31,11 @@ const UserList = (props) => {
   const defaultColDef= {
       
   }
+
+
+
+
+
 
   const onGridReady = (params) => {
     setGridApi(params.api)
@@ -49,6 +53,9 @@ const UserList = (props) => {
         rowData={comments}
       />
     </div>
+    <br/>
+    <h3>Web Workers Try</h3>
+    <WebWorkerTriggers/>
     
   </div>)
 }
